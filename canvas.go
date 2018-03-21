@@ -9,19 +9,18 @@ import (
 
 // Canvas to draw an image on.
 type Canvas struct {
-	title   string
 	image   image.Image
 	window  *sdl.Window
 	surface *sdl.Surface
 }
 
 // New creates a new canvas.
-func New(im image.Image, t string) (*Canvas, error) {
+func New(im image.Image, title string) (*Canvas, error) {
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
 		return nil, errors.Wrap(err, "could not initialize sdl")
 	}
 	b := im.Bounds()
-	w, err := sdl.CreateWindow(t, sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED, int32(b.Max.X), int32(b.Max.Y), sdl.WINDOW_SHOWN)
+	w, err := sdl.CreateWindow(title, sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED, int32(b.Max.X), int32(b.Max.Y), sdl.WINDOW_SHOWN)
 	if err != nil {
 		return nil, errors.Wrap(err, "could not create window")
 	}
@@ -29,7 +28,7 @@ func New(im image.Image, t string) (*Canvas, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "could not get window surface")
 	}
-	return &Canvas{t, im, w, s}, nil
+	return &Canvas{im, w, s}, nil
 }
 
 // Draw clears and redraws the image.
