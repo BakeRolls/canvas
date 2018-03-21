@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"git.192k.pw/bake/canvas"
+	"github.com/BakeRolls/canvas"
 )
 
 var colors = []color.RGBA{
