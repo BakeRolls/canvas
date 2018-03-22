@@ -10,34 +10,36 @@ import (
 // Canvas to draw an image on.
 type Canvas struct {
 	image   image.Image
+	scale   int
 	window  *sdl.Window
 	surface *sdl.Surface
 }
 
 // New creates a new canvas.
-func New(im image.Image, title string) (*Canvas, error) {
+func New(im image.Image, scale int, title string) (*Canvas, error) {
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
 		return nil, errors.Wrap(err, "could not initialize sdl")
 	}
-	b := im.Bounds()
-	w, err := sdl.CreateWindow(title, sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED, int32(b.Max.X), int32(b.Max.Y), sdl.WINDOW_SHOWN)
+	w := int32(im.Bounds().Max.X * scale)
+	h := int32(im.Bounds().Max.Y * scale)
+	window, err := sdl.CreateWindow(title, sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED, w, h, sdl.WINDOW_SHOWN)
 	if err != nil {
 		return nil, errors.Wrap(err, "could not create window")
 	}
-	s, err := w.GetSurface()
+	surface, err := window.GetSurface()
 	if err != nil {
 		return nil, errors.Wrap(err, "could not get window surface")
 	}
-	return &Canvas{im, w, s}, nil
+	return &Canvas{im, scale, window, surface}, nil
 }
 
 // Draw clears and redraws the image.
 func (c Canvas) Draw() error {
 	b := c.image.Bounds()
-	rect := &sdl.Rect{W: 1, H: 1}
+	rect := &sdl.Rect{W: int32(c.scale), H: int32(c.scale)}
 	for y := b.Min.Y; y < b.Max.Y; y++ {
 		for x := b.Min.X; x < b.Max.X; x++ {
-			rect.X, rect.Y = int32(x), int32(y)
+			rect.X, rect.Y = int32(x*c.scale), int32(y*c.scale)
 			r, g, b, a := c.image.At(x, y).RGBA()
 			r, g, b, a = r/257, g/257, b/257, a/257
 			if err := c.surface.FillRect(rect, a<<24|r<<16|g<<8|b<<0); err != nil {

@@ -4,6 +4,7 @@ Draw an image.Image to a window. You need to have SDL2 and pkg-config to compile
 
 ```go
 im := image.NewRGBA(image.Rect(0, 0, 640, 480))
+
 c, err := canvas.New(im, "RGB Canvas")
 if err != nil {
 	log.Fatal(err)
@@ -11,7 +12,8 @@ if err != nil {
 defer c.Close()
 
 // Modify the image based on its Pix slice or Set.
+
 c.Draw()
 ```
 
-![RGB Example](/example/screenshot.png)
+![Dagget Beaver](/example/screenshot.png)
