@@ -15,8 +15,8 @@ var colors = []color.RGBA{
 	color.RGBA{B: 255, A: 255},
 }
 
-// Create a new image and fill fill the first third with red, the second with
-// green and the third with blue.
+// Create a new image and fill the first third with red, the second with green
+// and the third with blue.
 func main() {
 	im := image.NewRGBA(image.Rect(0, 0, 480, 360))
 	c, err := canvas.New(im, 1, "RGB Canvas")
