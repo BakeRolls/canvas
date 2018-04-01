@@ -11,7 +11,7 @@ import (
 
 // Open an image and show it twice its original size.
 func main() {
-	f, err := os.Open("dagget.png")
+	f, err := os.Open("daggett.png")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -19,7 +19,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	c, err := canvas.New(im, 2, "Dagget")
+	c, err := canvas.New(im, 2, "Daggett")
 	if err != nil {
 		log.Fatal(err)
 	}
