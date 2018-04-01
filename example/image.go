@@ -5,12 +5,11 @@ import (
 	_ "image/png"
 	"log"
 	"os"
-	"time"
 
 	"github.com/BakeRolls/canvas"
 )
 
-// Open an image and show it twice as big.
+// Open an image and show it twice its original size.
 func main() {
 	f, err := os.Open("dagget.png")
 	if err != nil {
@@ -25,7 +24,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer c.Close()
-	c.Draw()
-
-	time.Sleep(5 * time.Second)
+	for c.Update() {
+		c.Draw()
+	}
 }

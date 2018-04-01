@@ -33,6 +33,15 @@ func New(im image.Image, scale int, title string) (*Canvas, error) {
 	return &Canvas{im, scale, window, surface}, nil
 }
 
+func (c Canvas) Update() bool {
+	switch sdl.PollEvent().(type) {
+	case *sdl.QuitEvent:
+		return false
+		break
+	}
+	return true
+}
+
 // Draw clears and redraws the image.
 func (c Canvas) Draw() error {
 	b := c.image.Bounds()

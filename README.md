@@ -11,9 +11,11 @@ if err != nil {
 }
 defer c.Close()
 
-// Modify the image based on its Pix slice or Set.
-
-c.Draw()
+// Update returns true until the window should be closed.
+for c.Update() {
+	// Modify the image based on its Pix slice or Set.
+	c.Draw()
+}
 ```
 
 ![Dagget Beaver](/example/screenshot.png)

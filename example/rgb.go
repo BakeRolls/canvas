@@ -4,7 +4,6 @@ import (
 	"image"
 	"image/color"
 	"log"
-	"time"
 
 	"github.com/BakeRolls/canvas"
 )
@@ -15,8 +14,8 @@ var colors = []color.RGBA{
 	color.RGBA{B: 255, A: 255},
 }
 
-// Create a new image and fill the first third with red, the second with green
-// and the third with blue.
+// Create a new image and fill it line by line (the first third red, the second
+// green and the third blue). Close the Window afterwards.
 func main() {
 	im := image.NewRGBA(image.Rect(0, 0, 480, 360))
 	c, err := canvas.New(im, 1, "RGB Canvas")
@@ -26,15 +25,11 @@ func main() {
 	defer c.Close()
 
 	b := im.Bounds()
-	for y := b.Min.Y; y < b.Max.Y; y++ {
+	for y := b.Min.Y; c.Update() && y < b.Max.Y; y++ {
 		color := colors[y/(b.Max.Y/len(colors))]
 		for x := b.Min.X; x < b.Max.X; x++ {
 			im.Set(x, y, color)
 		}
+		c.Draw()
 	}
-	if err := c.Draw(); err != nil {
-		log.Fatal(err)
-	}
-
-	time.Sleep(5 * time.Second)
 }
