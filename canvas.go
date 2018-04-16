@@ -33,13 +33,10 @@ func New(im image.Image, scale int, title string) (*Canvas, error) {
 	return &Canvas{im, scale, window, surface}, nil
 }
 
+// Update determines if the window shold get closed.
 func (c Canvas) Update() bool {
-	switch sdl.PollEvent().(type) {
-	case *sdl.QuitEvent:
-		return false
-		break
-	}
-	return true
+	_, ok := sdl.PollEvent().(*sdl.QuitEvent)
+	return !ok
 }
 
 // Draw clears and redraws the image.
