@@ -4,6 +4,8 @@ import (
 	"image"
 	"image/color"
 	"log"
+	"sync"
+	"time"
 
 	"github.com/BakeRolls/canvas"
 )
@@ -24,12 +26,24 @@ func main() {
 	}
 	defer c.Close()
 
+	mu := &sync.Mutex{}
+	go draw(mu, im)
+	for c.Update() {
+		mu.Lock()
+		c.Draw()
+		mu.Unlock()
+	}
+}
+
+func draw(mu *sync.Mutex, im *image.RGBA) {
 	b := im.Bounds()
-	for y := b.Min.Y; c.Update() && y < b.Max.Y; y++ {
+	for y := b.Min.Y; y < b.Max.Y; y++ {
 		color := colors[y/(b.Max.Y/len(colors))]
+		mu.Lock()
 		for x := b.Min.X; x < b.Max.X; x++ {
 			im.Set(x, y, color)
 		}
-		c.Draw()
+		mu.Unlock()
+		time.Sleep(100 * time.Millisecond)
 	}
 }

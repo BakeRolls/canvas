@@ -59,7 +59,7 @@ func (c Canvas) Draw() error {
 	return nil
 }
 
-// Close destroys the window.
+// Close the window.
 func (c Canvas) Close() {
 	c.window.Destroy()
 	sdl.Quit()
