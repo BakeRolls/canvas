@@ -18,4 +18,4 @@ for c.Update() {
 }
 ```
 
-![Dagget Beaver](/example/screenshot.png)
+![Image](/example/image_screenshot.png) ![Sine Wave](/example/sinewave_screenshot.gif)
