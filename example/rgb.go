@@ -26,12 +26,9 @@ func main() {
 	}
 	defer c.Close()
 
-	mu := &sync.Mutex{}
-	go draw(mu, im)
+	go draw(c.Mu, im)
 	for c.Update() {
-		mu.Lock()
 		c.Draw()
-		mu.Unlock()
 	}
 }
 
@@ -44,6 +41,6 @@ func draw(mu *sync.Mutex, im *image.RGBA) {
 			im.Set(x, y, color)
 		}
 		mu.Unlock()
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(25 * time.Millisecond)
 	}
 }

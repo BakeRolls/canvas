@@ -2,6 +2,7 @@ package canvas
 
 import (
 	"image"
+	"sync"
 
 	"github.com/pkg/errors"
 	"github.com/veandco/go-sdl2/sdl"
@@ -13,6 +14,8 @@ type Canvas struct {
 	scale   int
 	window  *sdl.Window
 	surface *sdl.Surface
+
+	Mu *sync.Mutex
 }
 
 // New creates a new canvas.
@@ -30,7 +33,7 @@ func New(im image.Image, scale int, title string) (*Canvas, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "could not get window surface")
 	}
-	return &Canvas{im, scale, window, surface}, nil
+	return &Canvas{im, scale, window, surface, &sync.Mutex{}}, nil
 }
 
 // Update determines if the window shold get closed.
@@ -43,6 +46,7 @@ func (c Canvas) Update() bool {
 func (c Canvas) Draw() error {
 	b := c.image.Bounds()
 	rect := &sdl.Rect{W: int32(c.scale), H: int32(c.scale)}
+	c.Mu.Lock()
 	for y := b.Min.Y; y < b.Max.Y; y++ {
 		for x := b.Min.X; x < b.Max.X; x++ {
 			rect.X, rect.Y = int32(x*c.scale), int32(y*c.scale)
@@ -53,6 +57,7 @@ func (c Canvas) Draw() error {
 			}
 		}
 	}
+	c.Mu.Unlock()
 	if err := c.window.UpdateSurface(); err != nil {
 		return errors.Wrap(err, "could not update window surface")
 	}
