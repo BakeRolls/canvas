@@ -1,3 +1,4 @@
+// Package canvas allows drawing an image.Image to a window.
 package canvas
 
 import (
@@ -19,12 +20,12 @@ type Canvas struct {
 }
 
 // New creates a new canvas.
-func New(im image.Image, scale int, title string) (*Canvas, error) {
+func New(img image.Image, scale int, title string) (*Canvas, error) {
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
 		return nil, errors.Wrap(err, "could not initialize sdl")
 	}
-	w := int32(im.Bounds().Max.X * scale)
-	h := int32(im.Bounds().Max.Y * scale)
+	w := int32(img.Bounds().Max.X * scale)
+	h := int32(img.Bounds().Max.Y * scale)
 	window, err := sdl.CreateWindow(title, sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED, w, h, sdl.WINDOW_SHOWN)
 	if err != nil {
 		return nil, errors.Wrap(err, "could not create window")
@@ -33,7 +34,7 @@ func New(im image.Image, scale int, title string) (*Canvas, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "could not get window surface")
 	}
-	return &Canvas{im, scale, window, surface, &sync.Mutex{}}, nil
+	return &Canvas{img, scale, window, surface, &sync.Mutex{}}, nil
 }
 
 // Update determines if the window shold get closed.
